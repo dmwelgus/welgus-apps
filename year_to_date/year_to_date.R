@@ -1,4 +1,4 @@
-## Underlying functions for 'year-to-date' app
+## Underlying function for 'year-to-date' app
 
 library(jsonlite)
 library(curl)
