@@ -38,18 +38,24 @@ shinyServer(function(input, output) {
     ggplot(chi.df) + 
       aes(long, lat, group = group, fill = rate) +
       geom_polygon() +
-      geom_path(color="white") +
+      geom_path(color = "black") +
       coord_equal() +
       scale_fill_continuous(low = "#ffeda0", high = "#800026", na.value = "#ffffcc") +
+      theme(axis.text.x = element_blank(), axis.text.y = element_blank(), 
+            axis.title.x = element_blank(), axis.title.y = element_blank(),
+            axis.ticks = element_blank()) +
       ggtitle("Crime Rates by Community Area")
     
     } else {
       ggplot(chi.df) + 
         aes(long, lat, group = group, fill = count) +
         geom_polygon() +
-        geom_path(color="white") +
+        geom_path(color = "black") +
         coord_equal() +
         scale_fill_continuous(low = "#ffeda0", high = "#800026", na.value = "#ffffcc") +
+        theme(axis.text.x = element_blank(), axis.text.y = element_blank(), 
+            axis.title.x = element_blank(), axis.title.y = element_blank(),
+            axis.ticks = element_blank()) +
         ggtitle("Crime Counts by Community Area")
       
     }
