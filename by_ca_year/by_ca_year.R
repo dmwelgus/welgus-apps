@@ -5,17 +5,19 @@ ca_pops <- read.csv("ca_pops.csv", stringsAsFactors = FALSE)
 
 by_ca_year <- function(year, type = "all", order_by = "rate") {
   
-  if (type == "homicides")              (codes <- "'01A'")
-  if (type == "violent crimes: def 1")  (codes <- "'01A','02','03','04A','04B'")
-  if (type == "violent crimes: def 2")  (codes <- "'01A','02','03','04A','04B','08A','08B'")
-  if (type == "drugs")                  (codes <- "'18'")
-  if (type == "property")               (codes <- "'05','06','07','09'")
   
   if (type == "all") {
     
     url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=community_area,count(*)&$group=community_area&$where=year=%s", year)
     
   } else {
+    
+    types <- c("homicides", "violent crimes: def 1", "violent crimes: def 2", "drugs", "property")
+    
+    code_list <- c("'01A'", "'01A','02','03','04A','04B'", "'01A','02','03','04A','04B','08A','08B'", 
+                   "'18'", "'05','06','07','09'")
+    
+    codes <- code_list[types == type]
     
     url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=community_area,count(*)&$group=community_area&$where=year=%s+AND+fbi_code+in(%s)",
                    year, codes)
