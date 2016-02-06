@@ -9,16 +9,16 @@ shinyUI(fluidPage(
       
       selectInput("var", 
                   label = "Select a Crime Category",
-                  choices = list("all","homicides", "violent crimes: def 1", "violent crimes: def 2",
-                                 "property", "drugs"),
-                  selected = "homicides"),
+                  choices = list("All","Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2",
+                                 "Property", "Drugs"),
+                  selected = "Homicides"),
       
       sliderInput("years",
                   label = "Select years",
                   
-                  value = c(2010, 2015),
+                  value = c(2010, 2016),
                   min   = 2001,
-                  max   = 2015,
+                  max   = 2016,
                   step  = 1, 
                   sep   = ""),
       

@@ -1,6 +1,4 @@
 library(shiny)
-library(rgdal)
-library(maptools)
 library(ggplot2)
 library(plyr)
 # library(gpclib)

@@ -7,7 +7,11 @@ library(curl)
 year_to_date <- function(years, type) {
   
   # Quick query to get most recent date in crime table
-  url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,max(date)&$group=fbi_code&$where=year>=2015"
+  ref_time <- Sys.time() - 20*60*60*24
+  ref_time <- gsub(" ", "T", ref_time)
+  ref_time <- paste("'",ref_time,"'", sep = "")
+  url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,max(date)&$group=fbi_code&$where=date>=%s"
+  url <- sprintf(url, ref_time)
   x <- fromJSON(url)
   
   stop_date <- max(x$max_date)
@@ -16,11 +20,11 @@ year_to_date <- function(years, type) {
   quotes <- function(x) paste("'",x,"'",sep ="")
   stop_date <- quotes(stop_date)
   
-  if (type == "homicides")               (codes <- "'01A'")
-  if (type == "violent crimes: def 1")   (codes <- "'01A','02','03','04A','04B'")
-  if (type == "violent crimes: def 2")   (codes <- "'01A','02','03','04A','04B','08A','08B'")
-  if (type == "drugs")                   (codes <- "'18'")
-  if (type == "property")                (codes <- "'05','06','07','09'")
+  if (type == "Homicides")               (codes <- "'01A'")
+  if (type == "Violent Crimes: Def 1")   (codes <- "'01A','02','03','04A','04B'")
+  if (type == "Violent Crimes: Def 2")   (codes <- "'01A','02','03','04A','04B','08A','08B'")
+  if (type == "Drugs")                   (codes <- "'18'")
+  if (type == "Property")                (codes <- "'05','06','07','09'")
 
   
   
@@ -31,7 +35,7 @@ year_to_date <- function(years, type) {
     if (i > 1) (base_year <- substr(stop_date, 2, 5))
     stop_date <- gsub(base_year, years[i], stop_date)
     
-        if (type == "all") {
+        if (type == "All") {
       
             url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,count(*)&$group=fbi_code&$where=date+between'%s-01-01T00:00:00'+and+%s"
             url <- sprintf(url, years[i], stop_date)

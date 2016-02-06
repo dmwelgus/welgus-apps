@@ -7,16 +7,16 @@ shinyUI(fluidPage(
       
       selectInput("type", 
                   label = "Select a Crime Category",
-                  choices = list("all","homicides", "violent crimes: def 1", "violent crimes: def 2",
-                                 "property", "drugs"),
-                  selected = "violent crimes: def 1"),
+                  choices = list("All","Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2",
+                                 "Property", "Drugs"),
+                  selected = "Violent Crimes: Def 1"),
       
       sliderInput("years",
                   label = "Select years",
                   
-                  value = c(2010, 2015),
+                  value = c(2010, 2016),
                   min   = 2001,
-                  max   = 2015,
+                  max   = 2016,
                   step  = 1, 
                   sep   = ""),
       
@@ -26,11 +26,11 @@ shinyUI(fluidPage(
       tags$h4(tags$u("Definitions")),
       tags$table(style = "width:100%", border = "1", cellspacing = "2",
                  tags$tr(tags$th("TYPE"), tags$th("FBI Codes")),
-                 tags$tr(tags$td("homicides"), tags$td("01A")),
-                 tags$tr(tags$td("violent crimes: def 1"), tags$td("01A, 02, 03, 04A, 04B")),
-                 tags$tr(tags$td("violent crimes: def 2"), tags$td("01A, 02, 03, 04A, 04B, 08A, 08B")),
-                 tags$tr(tags$td("property"), tags$td("05, 06, 07, 09")),
-                 tags$tr(tags$td("drugs"), tags$td("18"))),
+                 tags$tr(tags$td("Homicides"), tags$td("01A")),
+                 tags$tr(tags$td("Violent Crimes: Def 1"), tags$td("01A, 02, 03, 04A, 04B")),
+                 tags$tr(tags$td("Violent Crimes: Def 2"), tags$td("01A, 02, 03, 04A, 04B, 08A, 08B")),
+                 tags$tr(tags$td("Property"), tags$td("05, 06, 07, 09")),
+                 tags$tr(tags$td("Drugs"), tags$td("18"))),
       tags$a("FBI Code Definitions", href = "http://gis.chicagopolice.org/clearmap_crime_sums/crime_types.html"),
       tags$p(tags$br()),
       
