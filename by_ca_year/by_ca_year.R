@@ -3,16 +3,16 @@ library(curl)
 
 ca_pops <- read.csv("ca_pops.csv", stringsAsFactors = FALSE)
 
-by_ca_year <- function(year, type = "all", order_by = "rate") {
+by_ca_year <- function(year, type = "All", order_by = "rate") {
   
   
-  if (type == "all") {
+  if (type == "All") {
     
     url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=community_area,count(*)&$group=community_area&$where=year=%s", year)
     
   } else {
     
-    types <- c("homicides", "violent crimes: def 1", "violent crimes: def 2", "drugs", "property")
+    types <- c("Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2", "Drugs", "Property")
     
     code_list <- c("'01A'", "'01A','02','03','04A','04B'", "'01A','02','03','04A','04B','08A','08B'", 
                    "'18'", "'05','06','07','09'")

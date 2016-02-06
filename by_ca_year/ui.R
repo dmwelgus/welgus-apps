@@ -8,15 +8,15 @@ shinyUI(fluidPage(
       
       selectInput("type", 
                   label = "Select a Crime Category",
-                  choices = list("all","homicides", "violent crimes: def 1", "violent crimes: def 2",
-                                 "property", "drugs"),
-                  selected = "violent crimes: def 1"),
+                  choices = list("All","Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2",
+                                 "Property", "Drugs"),
+                  selected = "Violent Crimes: Def 1"),
       
       selectInput("year",
                   label = "Select year",
                   choices = list("2001", "2002", "2003", "2004", "2005", "2006", "2007",
-                                 "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"),
-                  selected = "2014"),
+                                 "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"),
+                  selected = "2015"),
       
       selectInput("order_by",
                   label = "Order By Rate or Count",

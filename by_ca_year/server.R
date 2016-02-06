@@ -34,6 +34,9 @@ shinyServer(function(input, output) {
     chi.df <- chi.df[order(chi.df$order), ]
     names(chi.df)[c(17, 18)] <- c("count", "rate")
     
+    chi.df$count[is.na(chi.df$count)] <- 0
+    chi.df$rate[is.na(chi.df$rate)]  <- 0
+    
     if (input$order_by == "rate") {
     ggplot(chi.df) + 
       aes(long, lat, group = group, fill = rate) +
