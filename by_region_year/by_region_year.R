@@ -18,10 +18,10 @@ by_region_year <- function(year, type = "All", order_by = "rate", region = "CA")
     
   } else {
     
-    types <- c("Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2", "Drugs", "Property")
+    types <- c("Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2", "Drugs", "Property", "Weapons")
     
     code_list <- c("'01A'", "'01A','02','03','04A','04B'", "'01A','02','03','04A','04B','08A','08B'", 
-                   "'18'", "'05','06','07','09'")
+                   "'18'", "'05','06','07','09'", "'15'")
     
     codes <- code_list[types == type]
     
@@ -74,7 +74,7 @@ by_region_year <- function(year, type = "All", order_by = "rate", region = "CA")
     
     if (year >= 2010) {
       
-      y_col <- 5
+      y_col <- which(names(x) == "pop_2010")
       
     } else {
       
