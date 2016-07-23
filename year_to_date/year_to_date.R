@@ -1,20 +1,8 @@
 ## Underlying function for 'year-to-date' app
 
-library(jsonlite)
-library(curl)
-
-
-year_to_date <- function(years, type) {
+year_to_date <- function(years, type, stop_date) {
   
-  # Quick query to get most recent date in crime table
-  ref_time <- Sys.time() - 20*60*60*24
-  ref_time <- gsub(" ", "T", ref_time)
-  ref_time <- paste("'",ref_time,"'", sep = "")
-  url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,max(date)&$group=fbi_code&$where=date>=%s"
-  url <- sprintf(url, ref_time)
-  x <- fromJSON(url)
-  
-  stop_date <- max(x$max_date)
+
   base_year <- substr(stop_date, 1, 4)
   
   quotes <- function(x) paste("'",x,"'",sep ="")
@@ -55,7 +43,7 @@ year_to_date <- function(years, type) {
   
   table <- append(table, substr(stop_date, 7, 11))
   table <- as.data.frame(t(table))
-  names(table) <- append(years, "stop_date")
+  names(table) <- append(years, "Stop Date")
   
   table
 }
