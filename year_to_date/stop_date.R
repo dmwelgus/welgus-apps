@@ -15,3 +15,4 @@ get_stopDate <- function() {
 }
 
 get_years <- function(x) (x[1]:x[2])
+quotes <- function(x) paste("'",x,"'",sep ="")

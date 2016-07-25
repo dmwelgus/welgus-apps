@@ -20,6 +20,8 @@ shinyUI(fluidPage(
                   step  = 1, 
                   sep   = ""),
       
+      downloadButton('downloadData','Save Table'),
+      
       tags$p(tags$br()),
       tags$p(tags$br()),
       
@@ -36,7 +38,7 @@ shinyUI(fluidPage(
       
       tags$h4(tags$u("Other Crime Apps")),
       tags$table(stype = "width:100%",
-                tags$tr(tags$td(tags$a("Crime Rates by Community Area", href = "https://welgus-apps.shinyapps.io/by_ca_year"))),
+                tags$tr(tags$td(tags$a("Crime Rates by Region", href = "https://welgus-apps.shinyapps.io/by_region_year"))),
                 tags$tr(tags$td(tags$a("Monthly Crime Rates", href = "https://welgus-apps.shinyapps.io/by_month"))))),
             
     

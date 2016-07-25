@@ -5,7 +5,6 @@ year_to_date <- function(years, type, stop_date) {
 
   base_year <- substr(stop_date, 1, 4)
   
-  quotes <- function(x) paste("'",x,"'",sep ="")
   stop_date <- quotes(stop_date)
   
   if (type == "Homicides")               (codes <- "'01A'")
