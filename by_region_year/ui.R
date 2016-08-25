@@ -25,8 +25,8 @@ shinyUI(fluidPage(
       
       selectInput("order_by",
                   label = "Order By Rate or Count",
-                  choices = list("rate", "count"),
-                  selected = "rate"),
+                  choices = list("Rate", "Count"),
+                  selected = "Rate"),
       
       textInput(inputId = "title", label = "Plot Title"),
       downloadButton('downloadData','Save Table'),

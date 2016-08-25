@@ -2,7 +2,7 @@ library(jsonlite)
 library(curl)
 
 
-by_region_year <- function(year, type = "All", order_by = "rate", region = "CA") {
+by_region_year <- function(year, type = "All", order_by = "Rate", region = "CA") {
   
   
   region_list <- c(CA = "community_area", District = "district")
@@ -52,7 +52,7 @@ by_region_year <- function(year, type = "All", order_by = "rate", region = "CA")
   
       x$rate <- (x$count / x[, y_col]) * 100000
   
-      if (order_by == "count") {
+      if (order_by == "Count") {
     
           x <- x[order(-x$count), ]
     
@@ -61,11 +61,11 @@ by_region_year <- function(year, type = "All", order_by = "rate", region = "CA")
           x <- x[order(-x$rate), ]
       }
   
-      x <- cbind(1:nrow(x), x)
+      
   
-      x <- x[, c(1, 2, 3, 4, y_col + 1, 16)]
+      x <- x[, c(1, 2, 3, y_col , 15)]
   
-      names(x) <- c(" ","CA", "Count", "Community Area", "Pop", "Rate (per 100K)")
+      names(x) <- c("CA", "Count", "Community Area", "Pop", "Rate (per 100K)")
   
   } else {
     
@@ -93,11 +93,10 @@ by_region_year <- function(year, type = "All", order_by = "rate", region = "CA")
         x <- x[order(-x$rate), ]
       }
     
-    x <- cbind(1:nrow(x), x)
     
-    x <- x[, c(1, 2, 3, y_col + 1, 15)]
+    x <- x[, c(1, 2, y_col, 14)]
     
-    names(x) <- c(" ","District", "Count", "Pop", "Rate (per 100K)")
+    names(x) <- c("District", "Count", "Pop", "Rate (per 100K)")
     
   }
   
