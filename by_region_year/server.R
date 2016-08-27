@@ -6,6 +6,9 @@ library(plyr)
 source("by_region_year.R")
 source("plot_fun.R")
 
+# Change number indices to names. 
+
+
 shinyServer(function(input, output) {
   
   
@@ -32,11 +35,13 @@ shinyServer(function(input, output) {
     
   })
   
-  output$plot <- renderPlot({
+  myPlot <- reactive({
+    
+    
+    x <- dataInput()
     
     if (input$region == "Community Areas") {
       
-      x <- dataInput()  
       load("ca_df.RData")
       plot_df <- ca_df
       plot_df <- merge(plot_df, x[, c(2, 3,  5)], by.x = "AREA_NUMBE", by.y = "CA", all.x = TRUE)
@@ -44,7 +49,6 @@ shinyServer(function(input, output) {
       
     } else {
       
-      x <- dataInput()
       load("district_df.RData")
       plot_df <- district_df
       plot_df <- merge(plot_df, x[, c(1, 2, 4)], by.x = "DISTRICT", by.y = "District", all.x = TRUE)
@@ -52,10 +56,10 @@ shinyServer(function(input, output) {
     
     
     plot_df <- plot_df[order(plot_df$order), ]
-    names(plot_df)[c(ncol(plot_df) - 1, ncol(plot_df))] <- c("count", "rate")
+    names(plot_df)[c(ncol(plot_df) - 1, ncol(plot_df))] <- c("Count", "Rate")
     
-    plot_df$count[is.na(plot_df$count)] <- 0
-    plot_df$rate[is.na(plot_df$rate)]   <- 0
+    plot_df$count[is.na(plot_df$Count)] <- 0
+    plot_df$rate[is.na(plot_df$Rate)]   <- 0
     
     
     plot_fun(df = plot_df, fill_var = input$order_by, title = input$title)
@@ -68,13 +72,18 @@ shinyServer(function(input, output) {
   tab <- dataInput()
   
    if(input$order_by == "Rate") {
-     tab[order(-tab[, ncol(tab)]), ]
+     tab[order(-tab[, "Rate (per 100K)"]), ]
      
    } else {
      tab[order(-tab[, "Count"]), ]
    }
   
-    }, include.rownames = FALSE) 
+    }, include.rownames = FALSE)
+  
+  output$plot <- renderPlot({
+    
+    myPlot()
+  })
   
   
   
