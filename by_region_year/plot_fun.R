@@ -1,7 +1,7 @@
 plot_fun <- function(fill_var, title, df) {
   
     ggplot(df) + 
-      aes(long, lat, group = group, fill = get(fill_var)) +
+      aes_string(x = "long", y = "lat", group = "group", fill = fill_var) +
       geom_polygon() +
       geom_path(color = "black") +
       coord_equal() +
