@@ -17,26 +17,35 @@ shinyServer(function(input, output) {
     
     if (input$region == "Community Areas") {
       regions <- "CA"
-      cols <- c(3, 1, 2, 4, 5)
+      cols <- c("Community Area", "CA", "Count", "Population", "Rate per 100K")
     } else {
       regions <- "District"
-      cols <- c( "District", "Count", "Pop", "Rate (per 100K)")
+      cols <- c( "District", "Count", "Population", "Rate per 100K")
     }
     
     x <- by_region_year(year = input$year, type = input$type, order_by = "Rate", region = regions)
-    
     x <- x[, cols]
     
     if (input$region == "Police Districts") {
       x$District <- as.integer(x$District)
     }
     
-    x
+    if (input$add_arrests == "Yes") {
+      y <- add_arrests(year = input$year, type = input$type, region = regions)
+      x <- dplyr::full_join(x, y, by = regions)
+      
+      if (input$region == "Police Districts") {
+        cols <- c("District", "Count", "Arrest Made", "No Arrest Made", "Population", "Rate per 100K")
+      } else {
+        cols <- c("Community Area", "CA", "Count", "Arrest Made", "No Arrest Made", "Population", "Rate per 100K")
+      }
+    }
+    
+    x[, cols]
     
   })
   
   myPlot <- reactive({
-    
     
     x <- dataInput()
     
@@ -44,14 +53,14 @@ shinyServer(function(input, output) {
       
       load("ca_df.RData")
       plot_df <- ca_df
-      plot_df <- merge(plot_df, x[, c(2, 3,  5)], by.x = "AREA_NUMBE", by.y = "CA", all.x = TRUE)
+      plot_df <- merge(plot_df, x[, c("CA", "Count",  "Rate per 100K")], by.x = "AREA_NUMBE", by.y = "CA", all.x = TRUE)
       
       
     } else {
       
       load("district_df.RData")
       plot_df <- district_df
-      plot_df <- merge(plot_df, x[, c(1, 2, 4)], by.x = "DISTRICT", by.y = "District", all.x = TRUE)
+      plot_df <- merge(plot_df, x[, c("District", "Count", "Rate per 100K")], by.x = "DISTRICT", by.y = "District", all.x = TRUE)
     }
     
     
@@ -66,22 +75,25 @@ shinyServer(function(input, output) {
     
     
   })
-    
+  
+  
+  
+  
+  # Output Table  
   output$table <- renderTable({
     
   tab <- dataInput()
   
    if(input$order_by == "Rate") {
-     tab[order(-tab[, "Rate (per 100K)"]), ]
-     
+     tab[order(-tab[, "Rate per 100K"]), ]
    } else {
      tab[order(-tab[, "Count"]), ]
    }
+ }, include.rownames = FALSE)
   
-    }, include.rownames = FALSE)
   
+  # Output Plot
   output$plot <- renderPlot({
-    
     myPlot()
   })
   
