@@ -56,7 +56,7 @@ shinyUI(fluidPage(
       
       tags$h4(tags$u("Other Crime Apps")),
       tags$table(stype = "width:100%",
-                 tags$tr(tags$td(tags$a("Year-to-Date Crime Totals", href = "https://welgus-apps.shinyapps.io/year_to_date2"))),
+                 tags$tr(tags$td(tags$a("Year-to-Date Crime Totals", href = "https://welgus-apps.shinyapps.io/year_to_date"))),
                  tags$tr(tags$td(tags$a("Monthly Crime Rates", href = "https://welgus-apps.shinyapps.io/by_month"))))),
     mainPanel( 
     
