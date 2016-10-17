@@ -27,10 +27,23 @@ year_to_date <- function(years, type, stop_date) {
             url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,count(*)&$group=fbi_code&$where=date+between'%s-01-01T00:00:00'+and+%s"
             url <- sprintf(url, years[i], stop_date)
       
+          } else if (type == "Non-fatal Shootings"){
+            
+            shooting_descriptions <- read.csv("shooting_descriptions.csv")
+            shooting_descriptions <- shooting_descriptions$x
+            
+            shooting_descriptions <- paste("'", shooting_descriptions, "'", sep = "")
+            shooting_descriptions <- paste(shooting_descriptions, collapse = ",")
+            shooting_descriptions <- gsub(" ", "%20", shooting_descriptions)
+            
+            url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,count(*)&$group=fbi_code&$where=fbi_code='04B'+and+description+in(%s)+and+date+between'%s-01-01T00:00:00'+and+%s"
+            url <- sprintf(url, shooting_descriptions, years[i], stop_date)
+          
           } else {
-      
+            
             url <- "https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=fbi_code,count(*)&$group=fbi_code&$where=fbi_code+in(%s)+and+date+between'%s-01-01T00:00:00'+and+%s"
             url <- sprintf(url, codes, years[i], stop_date)
+            
           }
    
   

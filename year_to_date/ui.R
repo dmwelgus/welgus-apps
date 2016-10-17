@@ -7,7 +7,7 @@ shinyUI(fluidPage(
       
       selectInput("type", 
                   label = "Select a Crime Category",
-                  choices = list("All","Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2",
+                  choices = list("All","Homicides", "Non-fatal Shootings", "Violent Crimes: Def 1", "Violent Crimes: Def 2",
                                  "Property", "Drugs"),
                   selected = "Violent Crimes: Def 1"),
       
