@@ -12,7 +12,7 @@ year_to_date <- function(years, type, stop_date) {
   if (type == "Violent Crimes: Def 2")   (codes <- "'01A','02','03','04A','04B','08A','08B'")
   if (type == "Drugs")                   (codes <- "'18'")
   if (type == "Property")                (codes <- "'05','06','07','09'")
-
+  if (type == "Weapons")                 (codes <- "'15'")
   
   
  
