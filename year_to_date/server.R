@@ -12,23 +12,24 @@ shinyServer(function(input, output) {
   
   date      <- get_stopDate()
   
-  output$table <- renderTable({
+  data_table <- reactive({
     
     years <- get_years(input$years)
     
     year_to_date(years, type = input$type, stop_date = date)
 
-  }, include.rownames = FALSE)
+  })
+  
+  output$table <- renderTable({
+    
+    data_table()
+  }, include.rownames = TRUE)
   
   output$downloadData <- downloadHandler(
     filename = function() {paste(input$type, ".year_to_date", ".csv", sep = "")}, 
     content = function(file) {
       
-      get_years <- function(x) (x[1]:x[2])
-      years <- get_years(input$years)
-      
-      x <- year_to_date(years, type = input$type)
-      write.csv(x, file, row.names = FALSE)
+      write.csv(data_table(), file, row.names = FALSE)
     }
   )
   

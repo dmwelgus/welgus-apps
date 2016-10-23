@@ -15,8 +15,10 @@ year_to_date <- function(years, type, stop_date) {
 
   
   
-  table <- c()
-  
+ 
+  table_a <- c()
+  table_b <- c()
+
   for (i in 1:length(years)) {
     
     if (i > 1) (base_year <- substr(stop_date, 2, 5))
@@ -46,18 +48,36 @@ year_to_date <- function(years, type, stop_date) {
             
           }
    
-  
-    tab <- fromJSON(url)
+    url_a <-  paste(url, "+AND+arrest=true", sep = "")
+    url_b <-  paste(url, "+AND+arrest=false", sep = "")
     
-    table[i] <- sum(as.numeric(tab$count))
-  
+    tab_a <- fromJSON(url_a)
+    tab_b <- fromJSON(url_b)
+    
+    table_a[i] <- sum(as.numeric(tab_a$count))
+    table_b[i] <- sum(as.numeric(tab_b$count))
   }
   
-  table <- append(table, substr(stop_date, 7, 11))
-  table <- as.data.frame(t(table))
-  names(table) <- append(years, "Stop Date")
+
+  table_a <- append(table_a, substr(stop_date, 7, 11))
+  table_a <- as.data.frame(t(table_a), stringsAsFactors = FALSE)
+  names(table_a) <- append(years, "Stop Date")
   
-  table
+  table_b <- append(table_b, substr(stop_date, 7, 11))
+  table_b <- as.data.frame(t(table_b), stringsAsFactors = FALSE)
+  names(table_b) <- append(years, "Stop Date")
+  
+  final_table <- rbind(table_a, table_b)
+  final_table[, as.character(years)] <- lapply(final_table[, as.character(years)], as.numeric)
+  
+  sums <- apply(final_table[, as.character(years)], 2, sum)
+  
+  final_table <- rbind(final_table, rep(NA, 3))
+  final_table[["Stop Date"]][3] <- final_table[["Stop Date"]][1]
+  final_table[3, 1:(ncol(final_table) - 1)] <- sums
+  
+  rownames(final_table) <- c("Arrest Made", "No Arrest Made", "All")
+  final_table
 }
 
 
