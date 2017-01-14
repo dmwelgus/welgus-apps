@@ -1,3 +1,13 @@
+library(jsonlite)
+source("stop_date.R")
+
+default_date  <- get_stopDate()
+month <- substr(default_date, 6, 7)
+day   <- substr(default_date, 9, 10)
+max_year <- as.numeric(substr(Sys.Date(), 1, 4))
+
+latest_date <- paste(month, day, sep = "-")
+
 shinyUI(fluidPage(
   titlePanel("Crime in Chicago: Year to Date"),
   
@@ -14,11 +24,26 @@ shinyUI(fluidPage(
       sliderInput("years",
                   label = "Select years",
                   
-                  value = c(2010, 2016),
+                  value = c(2010, max_year),
                   min   = 2001,
-                  max   = 2016,
+                  max   = max_year,
                   step  = 1, 
                   sep   = ""),
+      
+      tags$p(tags$br()),
+      tags$p(tags$br()),
+      
+      tags$h4(tags$b(paste("Latest available date, ", latest_date, sep = ""))),
+      selectInput("month", label = "Enter Stop Month", 
+                  choices = c("","01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"), 
+                  selected = month),
+      
+      selectInput("day", label = "Enter Stop Day", 
+                  choices = c("","01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", 
+                              "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", 
+                              "26", "27", "28", "29", "30", "31"), 
+                  selected = day),
+      
       
       downloadButton('downloadData','Save Table'),
       

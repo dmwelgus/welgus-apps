@@ -1,3 +1,6 @@
+stop_year <- as.numeric(substr(Sys.Date(), 1, 4))
+years <- as.character(2001:stop_year)
+
 shinyUI(fluidPage(
   titlePanel("Crime in Chicago: by Region"),
   
@@ -14,9 +17,8 @@ shinyUI(fluidPage(
       
       selectInput("year",
                   label = "Select Year",
-                  choices = list("2001", "2002", "2003", "2004", "2005", "2006", "2007",
-                                 "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"),
-                  selected = "2015"),
+                  choices = as.list(years),
+                  selected = as.character(stop_year -1)),
       
       selectInput("region", 
                   label = "Select Region", 
