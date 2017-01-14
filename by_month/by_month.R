@@ -19,12 +19,23 @@ by_month <- function(years, type = "All") {
  
   if (type == "All") {
     
-      url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=date_trunc_ym(date)+AS+month,count(*)+AS+total&$group=month&$where=year+in(%s)",
+    url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=date_trunc_ym(date)+AS+month,count(*)+AS+total&$group=month&$where=year+in(%s)",
                      years)
   
-    } else {
+  } else if (type == "Non-fatal Shootings"){
     
-      url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=date_trunc_ym(date)+AS+month,count(*)+AS+total&$group=month&$where=year+in(%s)+and+fbi_code+in(%s)",
+    shooting_descriptions <- read.csv("shooting_descriptions.csv")
+    shooting_descriptions <- shooting_descriptions$x
+    
+    shooting_descriptions <- paste("'", shooting_descriptions, "'", sep = "")
+    shooting_descriptions <- paste(shooting_descriptions, collapse = ",")
+    shooting_descriptions <- gsub(" ", "%20", shooting_descriptions)
+    
+    url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=date_trunc_ym(date)+AS+month,count(*)+AS+total&$group=month&$where=year+in(%s)+AND+fbi_code='04B'+AND+description+in(%s)",
+                   years, shooting_descriptions)
+  } else {
+    
+    url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=date_trunc_ym(date)+AS+month,count(*)+AS+total&$group=month&$where=year+in(%s)+and+fbi_code+in(%s)",
                      years, codes)
             
   }

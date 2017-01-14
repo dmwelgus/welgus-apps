@@ -9,20 +9,36 @@ source("stop_date.R")
 
 shinyServer(function(input, output) {
   
+  base_date  <- get_stopDate()
+  base_year  <- substr(base_date, 1, 4)
+  base_month <- substr(base_date, 6, 7)
+  base_day   <- substr(base_date, 9, 10)
   
-  date      <- get_stopDate()
-  
-  data_table <- reactive({
+
+  data <- reactive({
     
+    input_date  <- as.Date(paste(base_year, input$month, input$day, sep = "-"), "%Y-%m-%d")
+    latest_date <- as.Date(base_date, "%Y-%m-%d")
+    
+    shiny::validate(
+      shiny::need(input_date <= latest_date, paste("Error!!! Latest available date is " ,  
+                                                   paste(base_month, base_day, sep = "-"), sep = " ")) 
+    )
+    
+    x <- paste(base_year, input$month, input$day, sep = "-")
+    x <- paste(x, "T23:59:59", sep = "")
+      
     years <- get_years(input$years)
     
-    year_to_date(years, type = input$type, stop_date = date)
-
+    year_to_date(years, type = input$type, stop_date = x)
+    
   })
   
+  
   output$table <- renderTable({
+
+    data()
     
-    data_table()
   }, include.rownames = TRUE)
   
   output$downloadData <- downloadHandler(
