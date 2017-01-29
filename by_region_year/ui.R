@@ -1,3 +1,5 @@
+
+# Get current year. 
 stop_year <- as.numeric(substr(Sys.Date(), 1, 4))
 years <- as.character(2001:stop_year)
 
@@ -18,7 +20,7 @@ shinyUI(fluidPage(
       selectInput("year",
                   label = "Select Year",
                   choices = as.list(years),
-                  selected = as.character(stop_year -1)),
+                  selected = as.character(stop_year - 1)),
       
       selectInput("region", 
                   label = "Select Region", 
