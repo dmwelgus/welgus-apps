@@ -2,8 +2,6 @@ library(shiny)
 library(ggplot2)
 
 
-source("by_region_year.R")
-source("plot_fun.R")
 
 shinyServer(function(input, output) {
   
@@ -12,31 +10,27 @@ shinyServer(function(input, output) {
     
     if (input$region == "Community Areas") {
       regions <- "CA Number"
-      cols <- c("CA Number", "Community Area", "Total", "Population", "Rate per 100K")
+      cols <- ca_names
     } else {
       regions <- "District"
-      cols <- c( "District", "Total", "Population", "Rate per 100K")
+      cols <- district_names
     }
     
     x <- by_region_year(year = input$year, type = input$type, region = regions)
-    x <- x[, cols]
+    names(x) <- cols
     
-    if (input$region == "Police Districts") {
-      x$District <- as.integer(x$District)
-    }
     
     if (input$add_arrests == "Yes") {
       y <- add_arrests(year = input$year, type = input$type, region = regions)
       x <- dplyr::left_join(x, y, by = regions)
       
       if (input$region == "Police Districts") {
-        cols <- c("District", "Total", "Arrest Made", "No Arrest Made", "Population", "Rate per 100K")
+        cols <- append(district_names, arrest_names, after = 2)
       } else {
-        cols <- c("CA Number", "Community Area", "Total", "Arrest Made", "No Arrest Made", "Population", "Rate per 100K")
+        cols <- append(ca_names, arrest_names, after = 3)
       }
       
-      x[["Arrest Made"]][is.na(x[["Arrest Made"]])] <- 0
-      x[["No Arrest Made"]][is.na(x[["No Arrest Made"]])] <- 0
+      x[arrest_names][is.na(x[arrest_names])] <- 0
       
     }
     

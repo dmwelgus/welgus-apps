@@ -30,16 +30,12 @@ by_region_year <- function(year, type = "All", region = "CA Number") {
     
   } else {
     
-    types <- c("Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2", "Drugs", "Property", "Weapons")
-    code_list <- c("'01A'", "'01A','02','03','04A','04B'", "'01A','02','03','04A','04B','08A','08B'", 
-                   "'18'", "'05','06','07','09'", "'15'")
-    codes <- code_list[types == type]
+    codes <- crime_codes[type]
     
     url <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=%s,count(*)&$group=%s&$where=year=%s+AND+fbi_code+in(%s)",
                    region, region, year, codes)
     
   }
-  
   
   
   x <- jsonlite::fromJSON(url)
@@ -52,38 +48,36 @@ by_region_year <- function(year, type = "All", region = "CA Number") {
       
       if (year >= 2010) {
     
-        y_col <- 5
+        y_col <- "pop_2010"
     
       } else {
     
-        y_col <- grep(year, names(x), fixed = TRUE)
+        y_col <- grep(year, names(x), fixed = TRUE, value = TRUE)
     
       }
   
   
       x$rate <- (x$count / x[, y_col]) * 100000
-      x <- x[, c(1, 2, 3, y_col , 15)]
-      names(x) <- c("CA Number", "Total", "Community Area", "Population", "Rate per 100K")
-  
+      x <- x[, c("community_area", "CommunityArea", "count", y_col , "rate")]
+      
   } else {
     
-    x$district <- as.numeric(x$district)
+    x$district <- as.integer(x$district)
     x <- merge(x, district_pops, by = "district", all.y = TRUE, row.names = FALSE)
     x$count[is.na(x$district)] <- 0
     
     if (year >= 2010) {
       
-      y_col <- which(names(x) == "pop_2010")
+      y_col <- "pop_2010"
       
     } else {
       
-      y_col <- grep(year, names(x), fixed = TRUE)
+      y_col <- grep(year, names(x), fixed = TRUE, value = TRUE)
       
     }
     
     x$rate <- (x$count / x[, y_col]) * 100000
-    x <- x[, c(1, 2, y_col, 14)]
-    names(x) <- c("District", "Total", "Population", "Rate per 100K")
+    x <- x[, c("district", "count", y_col, "rate")]
     
   }
   
@@ -118,12 +112,7 @@ add_arrests <- function(year, type = "All", region = "CA Number") {
     
   } else {
     
-    types <- c("Homicides", "Violent Crimes: Def 1", "Violent Crimes: Def 2", "Drugs", "Property", "Weapons")
-    
-    code_list <- c("'01A'", "'01A','02','03','04A','04B'", "'01A','02','03','04A','04B','08A','08B'", 
-                   "'18'", "'05','06','07','09'", "'15'")
-    
-    codes <- code_list[types == type]
+    codes <- crime_codes[type]
     
     url_a <- sprintf("https://data.cityofchicago.org/resource/6zsd-86xi.json?$select=%s,count(*)&$group=%s&$where=year=%s+AND+fbi_code+in(%s)+AND+arrest=true",
                    region, region, year, codes)
@@ -154,12 +143,9 @@ add_arrests <- function(year, type = "All", region = "CA Number") {
     df <- merge(x, y, by = "District", all = TRUE)
   }
   
-
-  df[["Arrest Made"]][is.na(df[["Arrest Made"]])] <- 0
-  df[["No Arrest Made"]][is.na(df[["No Arrest Made"]])] <- 0
   
-  df[["Arrest Made"]]    <- as.integer(df[["Arrest Made"]])
-  df[["No Arrest Made"]] <- as.integer(df[["No Arrest Made"]])
+  df[arrest_names][is.na(df[arrest_names])] <- 0
+  df[arrest_names] <- lapply(df[arrest_names], as.integer)
   
   df
 }
