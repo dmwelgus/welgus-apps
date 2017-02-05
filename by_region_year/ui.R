@@ -28,8 +28,8 @@ shinyUI(fluidPage(
                   selected = "Community Areas"),
       
       selectInput("order_by",
-                  label = "Order By Rate or Count",
-                  choices = list("Rate", "Count"),
+                  label = "Order By Rate or Total",
+                  choices = list("Rate", "Total"),
                   selected = "Rate"),
       
       selectInput("add_arrests", 
