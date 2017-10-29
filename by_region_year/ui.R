@@ -66,5 +66,20 @@ shinyUI(fluidPage(
     
       tabsetPanel(
         tabPanel("Table", tableOutput("table")), 
-        tabPanel("Plot", plotOutput("plot")))))
+        tabPanel("Plot", plotOutput("plot")), 
+        tabPanel("Map", plotOutput('map'),
+                 actionButton("do", "Click to load map"),
+                 
+                 tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "style.css")),
+                 #load d3js library
+                 tags$script(src="https://d3js.org/d3.v3.min.js"),
+                 #load json
+                 tags$script(src="http://d3js.org/topojson.v1.min.js"),
+                 #load queue
+                 tags$script(src="https://d3js.org/d3-queue.v3.min.js"),
+                 #load javascript
+                 tags$script(src="test.js"),
+                 #reference map
+                 tags$div(id="div_map")))))
+                 
 ))

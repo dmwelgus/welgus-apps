@@ -1,9 +1,9 @@
 library(shiny)
 library(ggplot2)
+library(geojsonio)
 
 
-
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
 
   dataInput <- reactive({
@@ -101,5 +101,24 @@ shinyServer(function(input, output) {
     content = function(file) {
     ggsave(file, plot = myPlot())
   })
+  
+  my_d3 <- reactive({ 
+    data <- dataInput()
+    
+    if(input$order_by == "Rate") {
+      data[order(-data[, "Rate per 100K"]), ]
+    } else {
+      data[order(-data[, "Total"]), ]
+    }
+    
+    names(data) = c("ca_num", "community_area", "count", "population", "rateper100K")
+    #topo_json = fromJSON('community_areas.topojson')
+    session$sendCustomMessage(type="jsondata", data)
+  })
+  
+  observeEvent(input$do, {
+    my_d3()
+  })
+  
   
 })
