@@ -78,7 +78,7 @@ shinyUI(fluidPage(
                  #load queue
                  tags$script(src="https://d3js.org/d3-queue.v3.min.js"),
                  #load javascript
-                 tags$script(src="test.js"),
+                 tags$script(src="main.js"),
                  #reference map
                  tags$div(id="div_map")))))
                  
